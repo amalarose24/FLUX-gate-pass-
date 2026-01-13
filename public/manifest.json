@@ -1,0 +1,20 @@
+{
+  "short_name": "FLUX",
+  "name": "FLUX Gate Pass",
+  "icons": [
+    {
+      "src": "/flux-logo.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/flux-logo.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000"
+}
