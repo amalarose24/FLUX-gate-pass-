@@ -1,54 +1,39 @@
-// src/pages/Login.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { USERS } from '../mockData';
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const user = USERS[username];
-
-    // Simple password check
-    if (user && user.pass === password) {
-      sessionStorage.setItem('currentUser', JSON.stringify(user));
-      navigate(`/${user.role}`);
-    } else {
-      setError('Invalid Credentials. Try: student / 123');
-    }
+    try {
+      const res = await axios.post('http://localhost:5000/api/login', { username, password });
+      sessionStorage.setItem('currentUser', JSON.stringify(res.data));
+      
+      const role = res.data.role;
+      if(role === 'student') navigate('/student');
+      else if(role === 'faculty') navigate('/faculty');
+      else if(role === 'warden') navigate('/warden');
+      else if(role === 'guard') navigate('/guard');
+      else if(role === 'office') navigate('/office');
+    } catch(err) { alert("Invalid Credentials"); }
   };
 
   return (
-    <div className="fade-in" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#141414' }}>
-      <div className="glass-card" style={{ width: '100%', maxWidth: '400px', padding: '40px', background: 'rgba(30,30,30,0.9)' }}>
-        <h2 style={{ color: 'white', marginBottom: '30px', fontWeight: 'bold' }}>Sign In</h2>
-        
+    <div className="splash-container">
+      <div className="glass-card" style={{width:'350px'}}>
+        <h1 style={{color:'#e50914'}}>FLUX</h1>
+        <p style={{color:'#aaa'}}>Gate Pass System</p>
         <form onSubmit={handleLogin}>
-          <input 
-            className="netflix-input" 
-            placeholder="Username" 
-            value={username} 
-            onChange={e => setUsername(e.target.value)} 
-          />
-          <input 
-            className="netflix-input" 
-            type="password" 
-            placeholder="Password" 
-            value={password} 
-            onChange={e => setPassword(e.target.value)} 
-          />
-          
-          <button type="submit" className="netflix-btn">Sign In</button>
-          
-          {error && <p style={{ color: '#e50914', marginTop: '15px', fontSize: '14px' }}>{error}</p>}
+          <input className="netflix-input" placeholder="Username" onChange={e=>setUsername(e.target.value)} />
+          <input className="netflix-input" type="password" placeholder="Password" onChange={e=>setPassword(e.target.value)} />
+          <button className="netflix-btn" style={{marginTop:'15px'}}>Sign In</button>
         </form>
       </div>
     </div>
   );
 }
-
 export default Login;

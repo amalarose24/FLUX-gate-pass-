@@ -1,61 +1,47 @@
-// src/pages/OfficeDash.jsx
-import { useState } from 'react';
-import { GLOBAL_REQUESTS, MOCK_HISTORY } from '../mockData';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Navbar from '../components/Navbar';
 
 function OfficeDash() {
-  const [activeTab, setActiveTab] = useState('leave');
-  // Simulating Faculty requests
-  const [requests, setRequests] = useState(GLOBAL_REQUESTS.filter(r => r.name.includes('Prof') || r.name.includes('Warden') || r.name.includes('Advisor')));
+  const user = JSON.parse(sessionStorage.getItem('currentUser'));
+  const [pending, setPending] = useState([]);
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/pass/approver-data/${user._id}`).then(res => {
+       setPending(res.data.pending);
+       setHistory(res.data.history);
+    });
+  }, []);
+
+  const handleDecision = (id, status) => {
+    axios.put(`http://localhost:5000/api/pass/decide/${id}`, { status }).then(() => window.location.reload());
+  };
 
   return (
     <div className="fade-in">
       <Navbar />
-
-      <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
-        <h2 style={{ color: '#e50914' }}>Administrative Office</h2>
-        
-        <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', borderBottom: '1px solid #333', marginTop: '20px' }}>
-            <span onClick={() => setActiveTab('leave')} style={{ cursor: 'pointer', color: activeTab === 'leave' ? 'white' : '#737373', fontWeight: 'bold' }}>Faculty Permissions</span>
-            <span onClick={() => setActiveTab('logs')} style={{ cursor: 'pointer', color: activeTab === 'logs' ? 'white' : '#737373', fontWeight: 'bold' }}>Movement Logs</span>
-        </div>
-
-        {activeTab === 'leave' && (
-            <div>
-                {requests.length === 0 && <p style={{color: '#777'}}>No pending faculty requests.</p>}
-                {requests.map(req => (
-                    <div key={req.id} className="glass-card" style={{borderLeft: req.willReturn ? '4px solid green' : '4px solid red'}}>
-                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                            <h3>{req.name}</h3>
-                            <span style={{background: req.willReturn ? 'green' : 'red', padding: '5px 10px', borderRadius: '4px', fontSize: '12px', height: 'fit-content'}}>
-                                {req.willReturn ? 'MOVEMENT' : 'HALF DAY LEAVE'}
-                            </span>
-                        </div>
-                        <p>Reason: {req.type}</p>
-                        <button onClick={() => alert("Approved")} className="netflix-btn" style={{padding: '10px', width: 'auto'}}>Approve & Issue QR</button>
-                    </div>
-                ))}
+      <div className="content-pad">
+         <h3>Admin Office (Faculty/Staff Approvals)</h3>
+         
+         {pending.length === 0 && <p>No Pending Requests.</p>}
+         {pending.map(req => (
+            <div key={req._id} className="glass-card">
+               <h4>{req.userId.name} ({req.userRole})</h4>
+               <p>{req.reason} - {req.destination}</p>
+               <button className="btn-sm btn-success" onClick={()=>handleDecision(req._id, 'approved')}>Approve</button>
+               <button className="btn-sm btn-danger" onClick={()=>handleDecision(req._id, 'rejected')}>Reject</button>
             </div>
-        )}
+         ))}
 
-        {activeTab === 'logs' && (
-            <div>
-                {MOCK_HISTORY.map(log => (
-                    <div key={log.id} className="glass-card" style={{padding: '15px', display: 'flex', justifyContent: 'space-between'}}>
-                        <div>
-                            <strong>{log.type}</strong>
-                            <div style={{fontSize: '12px', color: '#aaa'}}>{log.date}</div>
-                        </div>
-                        <div style={{textAlign: 'right'}}>
-                            <div style={{color: '#46d369'}}>EXIT LOGGED</div>
-                        </div>
-                    </div>
-                ))}
+         <h4 style={{marginTop:'20px'}}>History</h4>
+         {history.map(req => (
+            <div key={req._id} style={{padding:'10px', borderBottom:'1px solid #333'}}>
+               {req.userId.name} - {req.status}
             </div>
-        )}
+         ))}
       </div>
     </div>
   );
 }
-
 export default OfficeDash;
