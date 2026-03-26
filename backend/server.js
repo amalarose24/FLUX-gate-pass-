@@ -81,9 +81,9 @@ whatsappClient.on('ready', () => {
     console.log('✅ WhatsApp Web Client is ready!');
 });
 
-whatsappClient.initialize().catch(err => {
+/*whatsappClient.initialize().catch(err => {
     console.error("❌ WhatsApp Initialization Failed:", err);
-});
+});*/
 // ==========================================
 const User = require('./models/User');
 const Pass = require('./models/Pass');
