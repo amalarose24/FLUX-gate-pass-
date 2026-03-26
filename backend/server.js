@@ -142,7 +142,7 @@ const isCollegeHoliday = (date) => {
 // 1. Zombie Pass: Runs every 1 minute for demo
 cron.schedule('*/1 * * * *', async () => {
     try {
-        const twoMinsAgo = new Date(Date.now() - 24 * 60 * 60 * 1000); // 2 minutes for demo
+        const twoMinsAgo = new Date(Date.now() - 5 * 60 * 1000); // 2 minutes for demo
         const activePasses = await Pass.find({ status: 'active', outTime: { $lt: twoMinsAgo } });
         if (activePasses.length > 0) {
             const warden = await User.findOne({ role: 'warden' });
@@ -161,7 +161,7 @@ cron.schedule('*/1 * * * *', async () => {
 // 2. Unused Pass Expiry: Approved but never scanned out
 cron.schedule('*/1 * * * *', async () => {
     try {
-        const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);//24 * 60 * 60 * 1000
+        const oneDayAgo = new Date(Date.now() - 5 * 60 * 1000);//24 * 60 * 60 * 1000
         await Pass.updateMany(
             { status: 'approved', updatedAt: { $lt: oneDayAgo } },
             { $set: { status: 'void' } } // 👈 Changed from expired to void per requirement
@@ -172,7 +172,7 @@ cron.schedule('*/1 * * * *', async () => {
 // 3. Absent Advisor Escalation: Runs every 1 minute
 cron.schedule('*/1 * * * *', async () => {
     try {
-        const thirtyMinsAgo = new Date(Date.now() - 30 * 60 * 1000); // 30 mins constraint
+        const thirtyMinsAgo = new Date(Date.now() - 5 * 60 * 1000); // 30 mins constraint
         const pendingPasses = await Pass.find({
             status: 'pending',
             createdAt: { $lt: thirtyMinsAgo }
