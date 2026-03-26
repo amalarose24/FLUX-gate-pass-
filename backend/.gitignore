@@ -1,0 +1,8 @@
+node_modules/
+.env
+seed.js
+
+# WhatsApp Web JS Session Files (CRITICAL!)
+.wwebjs_auth/
+.wwebjs_cache/
+whatsapp-session.json

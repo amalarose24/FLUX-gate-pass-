@@ -1,0 +1,88 @@
+
+C:\miniproject\college-gatepass\src\pages\WardenDash.jsx
+    4:10  error    'useNavigate' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           no-unused-vars
+   65:13  error    Error: Cannot access variable before it is declared
+
+`refreshLog` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  63 |         socket.on(`notify - ${user._id} `, (data) => {
+  64 |             sendSystemNotification(data.title, data.msg);
+> 65 |             refreshLog();
+     |             ^^^^^^^^^^ `refreshLog` accessed before it is declared
+  66 |             refreshApprovals();
+  67 |         });
+  68 |
+
+   99 |     };
+  100 |
+> 101 |     const refreshLog = () => axios.get(`http://localhost:5000/api/pass/my-history/${user._id}`).then(res => {
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 102 |         setMyHistory(res.data);
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 103 |         const active = res.data.find(p => p.status === 'approved' || p.status === 'active' || p.status === 'pending');
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 104 |         if (active) { setActivePass(active); if (active.status === 'approved') fetchTransportMatches(active.destination, active.destCoords); } else setActivePass(null);
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 105 |     });
+      | ^^^^^^^^ `refreshLog` is declared here
+  106 |
+  107 |     const decide = (id, status) => {
+  108 |         if (status === 'rejected' && !rejectReason) return toast.error("Reason needed");                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react-hooks/immutability
+   66:13  error    Error: Cannot access variable before it is declared
+
+`refreshApprovals` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  64 |             sendSystemNotification(data.title, data.msg);
+  65 |             refreshLog();
+> 66 |             refreshApprovals();
+     |             ^^^^^^^^^^^^^^^^ `refreshApprovals` accessed before it is declared
+  67 |         });
+  68 |
+  69 |         socket.on('force-refresh-transport', () => {
+
+   94 |     }, [timeframe, page]);
+   95 |
+>  96 |     const refreshApprovals = () => {
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  97 |         axios.get(`http://localhost:5000/api/pass/approver-data/${user._id}?page=${page}&limit=50`).then(res => { setPending(res.data.pending); setApprHistory(res.data.history); setTotalPages(Math.ceil(res.data.totalHistoryCount / 50) || 1); });
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  98 |         axios.get(`http://localhost:5000/api/analytics?role=${user.role}&batch=${user.advisorBatch || user.batch || ''}&timeframe=${timeframe}&hostel=${user.hostel || ''}`).then(res => setAnalytics(res.data)).catch(console.error);
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  99 |     };
+      | ^^^^^^^ `refreshApprovals` is declared here
+  100 |
+  101 |     const refreshLog = () => axios.get(`http://localhost:5000/api/pass/my-history/${user._id}`).then(res => {
+  102 |         setMyHistory(res.data);  react-hooks/immutability
+   70:65  error    Error: Cannot access variable before it is declared
+
+`fetchTransportMatches` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  68 |
+  69 |         socket.on('force-refresh-transport', () => {
+> 70 |             if (activePass && activePass.status === 'approved') fetchTransportMatches(activePass.destination, activePass.destCoords);
+     |                                                                 ^^^^^^^^^^^^^^^^^^^^^ `fetchTransportMatches` accessed before it is declared
+  71 |         });
+  72 |
+  73 |         refreshApprovals();
+
+  84 |     }, [activePass]);
+  85 |
+> 86 |     const fetchTransportMatches = (destination, coords) => {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 87 |         let url = `http://localhost:5000/api/transport/search?location=${destination}`;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 88 |         if (coords && coords.length === 2) url += `&lat=${coords[0]}&lng=${coords[1]}`;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 89 |         axios.get(url).then(r => setTransportData(r.data));
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 90 |     };
+     | ^^^^^^^ `fetchTransportMatches` is declared here
+  91 |
+  92 |     useEffect(() => {
+  93 |         refreshApprovals();                                                                                                                                                                                                                                                                                                                                                                                                                 react-hooks/immutability
+   84:8   warning  React Hook useEffect has missing dependencies: 'refreshApprovals', 'refreshLog', and 'user._id'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-hooks/exhaustive-deps
+   94:8   warning  React Hook useEffect has a missing dependency: 'refreshApprovals'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-hooks/exhaustive-deps
+  157:20  error    'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              no-unused-vars
+
+✖ 7 problems (5 errors, 2 warnings)
+

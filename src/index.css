@@ -1,139 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  --bg-color: #050505; /* Deep Black */
-  --card-bg: #121212;
-  --primary-color: #00e5ff; /* FLUX Cyan (matches your logo) */
-  --primary-glow: rgba(0, 229, 255, 0.4);
-  --text-white: #ffffff;
-  --text-gray: #b3b3b3;
-  --input-bg: #1e1e1e;
+  /* THEME: Elegant Dark & Teal */
+  --flux-bg: #0a0a0a;
+  /* Deepest Black */
+  --flux-card: #161616;
+  /* Card Background */
+  --flux-teal: #00bfa5;
+  /* NEW LOGO COLOR (Elegant Teal) */
+  --flux-teal-dim: rgba(0, 191, 165, 0.1);
+  --flux-green: #2e7d32;
+  /* Success (Darker/Mature) */
+  --flux-red: #c62828;
+  /* Error (Darker/Mature) */
+  --flux-text-main: #ffffff;
+  --flux-text-muted: #808080;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-white);
+  background-color: var(--flux-bg);
+  color: var(--flux-text-main);
+  font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
 }
 
-/* --- ANIMATIONS --- */
+/* --- CINEMATIC ANIMATIONS --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
 
-/* 1. FLUX Logo Pulse */
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 10px var(--primary-glow); transform: scale(1); }
-  50% { box-shadow: 0 0 30px var(--primary-glow); transform: scale(1.05); }
-  100% { box-shadow: 0 0 10px var(--primary-glow); transform: scale(1); }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.logo-img-splash {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  animation: pulseGlow 2s infinite ease-in-out;
-  margin-bottom: 20px;
-}
+@keyframes logoPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 191, 165, 0.4);
+  }
 
-/* 2. Text Slide Up */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  70% {
+    box-shadow: 0 0 0 15px rgba(0, 191, 165, 0);
+  }
 
-.flux-title {
-  font-size: 3.5rem;
-  font-weight: 900;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-  color: white;
-  animation: slideUp 0.8s ease-out forwards;
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 191, 165, 0);
+  }
 }
-
-.tagline-container {
-  margin-top: 15px;
-  font-family: monospace; /* Tech look */
-  letter-spacing: 3px;
-}
-
-.tagline-word {
-  opacity: 0;
-  display: inline-block;
-  margin: 0 8px;
-  font-size: 1.2rem;
-  color: var(--primary-color);
-  animation: slideUp 0.5s forwards;
-}
-
-.tagline-word:nth-child(1) { animation-delay: 0.5s; } /* SCAN */
-.tagline-word:nth-child(2) { animation-delay: 1.2s; } /* MOVE */
-.tagline-word:nth-child(3) { animation-delay: 1.9s; font-weight: bold; text-shadow: 0 0 10px var(--primary-color); } /* DONE */
 
 .fade-in {
-  animation: slideUp 0.6s ease-out forwards;
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 
-/* --- UI COMPONENTS (Updated Colors) --- */
+/* --- SPLASH SCREEN --- */
+.splash-container {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
 
+.splash-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  animation: logoPulse 2s infinite;
+  border: 2px solid var(--flux-teal);
+  padding: 5px;
+  background: #000;
+}
+
+.splash-title {
+  margin-top: 20px;
+  font-size: 2rem;
+  letter-spacing: 6px;
+  font-weight: 700;
+  background: linear-gradient(to right, #fff, var(--flux-teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.splash-tagline {
+  margin-top: 10px;
+  color: var(--flux-text-muted);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* --- UI COMPONENTS (Legacy for other pages, keeping to prevent breakage) --- */
+.content-pad {
+  padding: 100px 20px 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* The "Netflix" Glass Card */
+.glass-card {
+  background: var(--flux-card);
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  /* Sharper corners like modern apps */
+  padding: 24px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.glass-card:hover {
+  border-color: #444;
+}
+
+.glass-card.active-pass {
+  border: 1px solid var(--flux-teal);
+  background: linear-gradient(180deg, rgba(0, 191, 165, 0.05) 0%, var(--flux-card) 100%);
+}
+
+.section-title {
+  color: var(--flux-text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* --- INPUTS & BUTTONS --- */
 .netflix-input {
   width: 100%;
-  padding: 16px;
-  background: var(--input-bg);
+  background: #222;
   border: 1px solid #333;
-  border-radius: 8px;
   color: white;
+  padding: 14px;
+  border-radius: 4px;
+  font-size: 1rem;
   margin-bottom: 15px;
-  font-size: 16px;
+  outline: none;
+  transition: 0.2s;
   box-sizing: border-box;
-  transition: border 0.3s;
 }
 
 .netflix-input:focus {
-  outline: none;
-  border: 1px solid var(--primary-color);
-  box-shadow: 0 0 10px var(--primary-glow);
+  border-color: var(--flux-teal);
+  background: #2a2a2a;
 }
 
 .netflix-btn {
   width: 100%;
-  padding: 16px;
-  background: var(--primary-color);
-  color: black; /* Black text on Cyan looks better */
+  padding: 14px;
+  background: var(--flux-teal);
+  color: #000;
+  font-weight: 700;
   border: none;
-  border-radius: 8px;
-  font-weight: 800;
-  font-size: 16px;
+  border-radius: 4px;
+  font-size: 1rem;
   text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s;
   letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.netflix-btn:hover {
-  background: #fff;
-  box-shadow: 0 0 20px var(--primary-color);
+.netflix-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
 }
 
-.glass-card {
-  background: rgba(20, 20, 20, 0.8);
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 229, 255, 0.1); /* Cyan border hint */
-  margin-bottom: 20px;
+/* --- TRANSPORT TOGGLES --- */
+.btn-group {
+  display: flex;
+  gap: 10px;
+  background: #222;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.btn-toggle {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  color: #666;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.btn-toggle.active-blue {
+  background: var(--flux-teal);
+  color: #000;
+}
+
+.btn-toggle.active-yes {
+  background: var(--flux-green);
+  color: white;
+}
+
+.btn-toggle.active-no {
+  background: var(--flux-red);
+  color: white;
+}
+
+/* --- HISTORY LIST ITEM (Netflix Episode Style) --- */
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #222;
+  background: var(--flux-card);
+}
+
+.history-item:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.history-item:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom: none;
+}
+
+.history-date {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.history-dest {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #fff;
 }
 
 .status-badge {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: bold;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 600px) {
-    .flux-title { font-size: 2.5rem; }
-    .tagline-word { font-size: 1rem; }
-    .glass-card { padding: 20px; }
+.status-approved {
+  color: var(--flux-teal);
+  background: rgba(0, 191, 165, 0.15);
+}
+
+.status-rejected {
+  color: var(--flux-red);
+  background: rgba(198, 40, 40, 0.15);
+}
+
+/* Utilities for hiding scrollbar that might still be used */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
