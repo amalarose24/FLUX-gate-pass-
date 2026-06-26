@@ -42,7 +42,4 @@ External APIs & Geospatial Libraries:
 * MongoDB Atlas account (or local MongoDB server)
 * Git
 
-### 1. Clone the repository
-```bash
-git clone [https://github.com/your-username/flux-gate-pass.git](https://github.com/your-username/flux-gate-pass.git)
-cd flux-gate-pass
+
