@@ -1,16 +1,48 @@
-# React + Vite
+FLUX: Automated Campus Access Control and Travel Support
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+FLUX is a comprehensive, digitized Gate Pass Management Application integrated with an ad-hoc Smart Transport Matching System. Built on the MERN stack, it modernizes campus infrastructure by replacing physical logbooks with dynamic cryptographic QR codes, automated workflow escalations, and algorithmic ride-sharing.
 
-Currently, two official plugins are available:
+->Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1) Dynamic Security QR Codes: Headless security scanning using short-lived (30-second expiry) JSON Web Tokens (JWT) to explicitly prevent screenshot spoofing and credential sharing.
+2) Smart Transport Matching: Integrates Open Source Routing Machine (OSRM) and Turf.js to geometrically calculate 5km radius overlaps, intelligently matching ride-seekers with ride-providers.
+3) Automated Escalation Logic: Utilizes Node-Cron background jobs to automatically reroute pending pass requests to backup administrators if ignored for over 60 minutes.
+4) Real-Time Analytics: Role-specific dashboards for Wardens and Office Admins featuring live campus traffic visualizations powered by Recharts and Socket.io.
+5) Automated Instant Alerts: Integrates a headless WhatsApp Web API (Puppeteer) and OneSignal to dispatch instantaneous departure/entry alerts to parents and push notifications to approvers.
+6) Double-Scan Auto-Sync: Scanning a ride-provider's QR code at the gate automatically syncs the exit/entry statuses of all linked passengers.
 
-## React Compiler
+-> Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Frontend:
+* React.js (Vite) - Progressive Web App (PWA)
+* Tailwind CSS
+* Recharts (Data Visualization)
 
-## Expanding the ESLint configuration
+Backend:
+* Node.js & Express.js
+* JSON Web Tokens (JWT) for RBAC Auth
+* Node-Cron (Background scheduling)
+* Socket.io (WebSockets)
+* Puppeteer (Headless Chromium for WhatsApp Web)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Database:
+* MongoDB Atlas
+* Mongoose ODM
+
+External APIs & Geospatial Libraries:
+* OSRM (Open Source Routing Machine)
+* Turf.js (Spatial Geometry Calculations)
+* Photon Komoot API (Location Autocomplete)
+* OneSignal (Push Notifications)
+
+## Installation & Setup
+
+### Prerequisites
+* Node.js (v16 or higher)
+* MongoDB Atlas account (or local MongoDB server)
+* Git
+
+### 1. Clone the repository
+```bash
+git clone [https://github.com/your-username/flux-gate-pass.git](https://github.com/your-username/flux-gate-pass.git)
+cd flux-gate-pass
